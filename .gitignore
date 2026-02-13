@@ -1,0 +1,17 @@
+ 
+myenv/
+venv/
+ 
+__pycache__/
+*.pyc
+ 
+.env
+ 
+data/raw/
+data/processed/
+data/embeddings/
+ 
+graph/video_graph.pt
+ 
+.DS_Store
+Thumbs.db
