@@ -27,7 +27,8 @@ class Neo4jGraphService:
             "CREATE CONSTRAINT channel_id IF NOT EXISTS FOR (c:Channel) REQUIRE c.id IS UNIQUE",
             "CREATE CONSTRAINT tag_id IF NOT EXISTS FOR (t:Tag) REQUIRE t.id IS UNIQUE",
             "CREATE CONSTRAINT category_id IF NOT EXISTS FOR (c:Category) REQUIRE c.id IS UNIQUE",
-            "CREATE CONSTRAINT time_id IF NOT EXISTS FOR (t:Time) REQUIRE t.id IS UNIQUE"
+            "CREATE CONSTRAINT time_id IF NOT EXISTS FOR (t:Time) REQUIRE t.id IS UNIQUE",
+            "CREATE CONSTRAINT user_username IF NOT EXISTS FOR (u:User) REQUIRE u.username IS UNIQUE"
         ]
 
         with self.driver.session() as session:
