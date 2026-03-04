@@ -38,11 +38,33 @@ class UserService:
         query = """
         MATCH (u:User {username:$username})
         MATCH (v:Video {id:$video_id})
-        MERGE (u)-[:WATCHED]->(v)
+        MERGE (u)-[r:WATCHED]->(v)
+        SET r.last_watched = datetime()
         """
 
         with self.db.driver.session() as session:
             session.run(query, username=username, video_id=str(video_id))
 
         print("Watch recorded.")
+    def get_watch_history(self, username):
+        query = """
+        MATCH (u:User {username:$username})
+        OPTIONAL MATCH (u)-[:WATCHED]->(v:Video)
+        RETURN v.id AS video_id
+        """
+
+        with self.db.driver.session() as session:
+            result = session.run(query, username=username)
+            return [record["video_id"] for record in result if record["video_id"] is not None]
     
+    def get_recent_watched(self, username, limit=20):
+        query = """
+        MATCH (u:User {username:$username})-[r:WATCHED]->(v:Video)
+        RETURN v.id AS id
+        ORDER BY r.last_watched DESC
+        LIMIT $limit
+        """
+
+        with self.db.driver.session() as session:
+            result = session.run(query, username=username, limit=limit)
+            return [record["id"] for record in result]

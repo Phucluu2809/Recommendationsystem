@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SGR Watch</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: red;
+        }
+
+        .logout {
+            color: red;
+            text-decoration: none;
+        }
+
+        .main {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .video-section {
+            flex: 2;
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border-radius: 12px;
+            border: none;
+        }
+
+        .video-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .recommend-section {
+            flex: 1;
+            max-width: 400px;
+            height: 520px;
+            overflow-y: auto;
+            position: sticky;
+            top: 80px;
+        }
+
+        .recommend-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .recommend-item img {
+            width: 160px;
+            height: 90px;
+            border-radius: 8px;
+        }
+
+        .recommend-title {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .recommend-item:hover {
+            background-color: #eeeeee;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .all-section {
+            padding: 20px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .video-card:hover {
+            transform: scale(1.03);
+        }
+
+        .video-card img {
+            width: 100%;
+        }
+
+        .video-info {
+            padding: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="logo">SGR YouTube</div>
+        <div>
+            Xin chào {{ username }} |
+            <a class="logout" href="/logout">Đăng xuất</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="video-section">
+            <iframe id="videoPlayer" allowfullscreen></iframe>
+            <div class="video-title" id="videoTitle">
+                Chọn video để xem
+            </div>
+        </div>
+
+        <div class="recommend-section">
+            <h3>Recommended</h3>
+            <div id="recommendBox">
+                {% for v in recommended %}
+                <div class="recommend-item" data-id="{{ v.video_id }}" data-title="{{ v.title }}">
+                    <img src="https://img.youtube.com/vi/{{ v.video_id }}/0.jpg">
+                    <div class="recommend-title">{{ v.title }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="all-section">
+        <h3>Tất cả video</h3>
+        <div class="video-grid">
+            {% for video in all_videos %}
+            <div class="video-card" data-id="{{ video.id }}" data-title="{{ video.title }}">
+                <img src="https://img.youtube.com/vi/{{ video.id }}/0.jpg">
+                <div class="video-info">{{ video.title }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+
+        function attachClickEvents() {
+            document.querySelectorAll("[data-id]").forEach(el => {
+                el.onclick = () => {
+                    const id = el.getAttribute("data-id");
+                    const title = el.getAttribute("data-title");
+                    watchVideo(id, title);
+                };
+            });
+        }
+
+        function watchVideo(videoId, title) {
+
+            document.getElementById("videoPlayer").src =
+                "https://www.youtube.com/embed/" + videoId;
+
+            document.getElementById("videoTitle").innerText = title;
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+            fetch("/watch_ajax", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ video_id: videoId })
+            })
+                .then(res => res.json())
+                .then(data => {
+
+                    const box = document.getElementById("recommendBox");
+                    box.innerHTML = "";
+
+                    data.recommended.forEach(v => {
+
+                        const item = document.createElement("div");
+                        item.className = "recommend-item";
+                        item.setAttribute("data-id", v.video_id);
+                        item.setAttribute("data-title", v.title);
+
+                        item.innerHTML = `
+                        <img src="https://img.youtube.com/vi/${v.video_id}/0.jpg">
+                        <div class="recommend-title">${v.title}</div>
+                    `;
+
+                        box.appendChild(item);
+                    });
+
+                    attachClickEvents();
+                });
+        }
+
+        attachClickEvents();
+
+    </script>
+
+</body>
+
+</html>

@@ -55,10 +55,31 @@ class GraphBuilder:
 
         if similarity_edges is not None:
             self.graph["video", "similar_to", "video"].edge_index = similarity_edges
+ 
+        self.graph["video"].raw_data = node_data["videos"]
+        self.graph["video"].video_ids = node_data["video_ids"]
 
+        self.graph["channel"].channel_ids = list(node_data["channel_map"].keys())
+        self.graph["tag"].tag_names = list(node_data["tag_map"].keys())
+        self.graph["category"].category_ids = list(node_data["category_map"].keys())
+        self.graph["time"].time_buckets = list(node_data["time_map"].keys())
+ 
         torch.save(self.graph, "graph/video_graph.pt")
 
         print("\n🔥 GRAPH BUILT SUCCESSFULLY!")
         print(self.graph)
 
         return self.graph
+    def build_user_edges(self, watched_data):
+
+        u_src, u_dst = [], []
+
+        for username, video_id in watched_data:
+            if username in self.user_map and video_id in self.video_map:
+                u_src.append(self.user_map[username])
+                u_dst.append(self.video_map[video_id])
+
+        return {
+            ('user','watched','video'):
+                torch.tensor([u_src, u_dst])
+        }

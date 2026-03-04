@@ -1,5 +1,4 @@
-class Config:
- #setting topic
+class Config: 
     TOPICS = [
         "vietnam travel documentary",
         "street food vietnam",
@@ -11,3 +10,4 @@ class Config:
     TARGET_SIZE = 1000
  # chổ output
     RAW_DATA_PATH = "data/raw/crawled_data.json"
+    

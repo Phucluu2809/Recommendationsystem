@@ -41,4 +41,5 @@ class NodeBuilder:
             "tag_map": {t: i for i, t in enumerate(tags)},
             "category_map": {c: i for i, c in enumerate(categories)},
             "time_map": {t: i for i, t in enumerate(times)},
+            "channels": channels
         }

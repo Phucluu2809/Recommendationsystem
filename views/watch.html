@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ video.title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        iframe {
+            width: 900px;
+            height: 500px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .back {
+            margin-top: 20px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h2>{{ video.title }}</h2>
+        <a href="/home">🏠 Trang chủ</a>
+    </div>
+
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/{{ video.video_id }}" frameborder="0" allowfullscreen>
+        </iframe>
+    </div>
+
+    <a class="back" href="/home">⬅ Quay lại</a>
+
+</body>
+
+</html>
