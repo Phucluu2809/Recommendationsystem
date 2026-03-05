@@ -146,12 +146,10 @@ class GNNRecommender:
 
             vid_idx = mapping[vid]
             vid_embedding = embeddings[vid_idx]
-
             scores = []
 
             for node, idx in mapping.items():
                 if G.nodes[node]["type"] == "video" and node != vid:
-
                     score = F.cosine_similarity(
                         vid_embedding.unsqueeze(0),
                         embeddings[idx].unsqueeze(0)
@@ -163,14 +161,13 @@ class GNNRecommender:
  
             for candidate, _ in scores[:per_video_k]:
                 stack.append(candidate)
- 
 
         cleaned = []
         seen = set()
 
         for vid in stack:
             if vid in history:
-                continue
+                continue    
 
             if vid not in seen:
                 cleaned.append(vid)
