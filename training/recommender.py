@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     videos = load_data()
      
-    test_id = "6tmRFODAm3s"
+    test_id = "J0gGRM69zBs"
 
     print("Input video:", test_id,"  ", )
 
@@ -58,4 +58,4 @@ if __name__ == "__main__":
 
     print("\nRecommended:")
     for r in recs:
-        print(r["id"], "-", r["title"])
+        print(r["id"], "-", r["title"], "\n")
