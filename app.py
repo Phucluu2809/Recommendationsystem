@@ -15,7 +15,7 @@ HISTORY_PATH = os.path.join("data", "user_history.json")
 neo4j_service = Neo4jGraphService(
     "bolt://localhost:7687",
     "neo4j",
-    "12345678"
+    "22228888"
 )
 
 user_service = UserService(neo4j_service)

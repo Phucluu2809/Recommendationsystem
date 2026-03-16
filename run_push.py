@@ -4,7 +4,7 @@ from database.neo4j_service import Neo4jGraphService
 
 URI = "bolt://localhost:7687"
 USER = "neo4j"
-PASSWORD = "12345678"
+PASSWORD = "22228888"
 
 GRAPH_PATH = "graph/video_graph.pt"
 
