@@ -26,25 +26,21 @@ def build_graph(req: GraphRequest):
     )
 
 
-class HistoryRequest(BaseModel):
+class RecommendRequest(BaseModel):
+    graph_id: str
     history: list
 
 
 @app.post("/recommend")
-async def recommend(
-    graph_file: UploadFile = File(...),
-    history: str = File(...)
-):
+def recommend(req: RecommendRequest):
 
-    history_list = json.loads(history)
+    graph_path = f"graph/{req.graph_id}.pt"
 
-    graph_bytes = await graph_file.read()
-
-    results = recommend_videos(graph_bytes, history_list)
+    results = recommend_videos(graph_path, req.history)
 
     return {"recommendations": results}
 
- 
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     uvicorn.run("api:app", host="0.0.0.0", port=port)
