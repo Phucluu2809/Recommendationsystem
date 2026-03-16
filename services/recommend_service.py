@@ -1,4 +1,3 @@
-import torch
 import json
 import os
 from services.gnn_recommender import GNNRecommender

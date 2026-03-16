@@ -3,28 +3,30 @@ import json
 import torch
 from graph.graph_builder import GraphBuilder
 
-RAW_PATH = "data/raw/crawled_data.json"
-GRAPH_PATH = "graph/video_graph.pt"
 
+def build_graph_file(data, user_id):
 
-def build_graph_file(data):
+    raw_dir = "data/raw"
+    graph_dir = "graph"
 
-    os.makedirs("data/raw", exist_ok=True)
-    os.makedirs("graph", exist_ok=True)
+    os.makedirs(raw_dir, exist_ok=True)
+    os.makedirs(graph_dir, exist_ok=True)
 
-    # lưu JSON client gửi
-    with open(RAW_PATH, "w", encoding="utf-8") as f:
+    raw_path = f"{raw_dir}/{user_id}.json"
+    graph_path = f"{graph_dir}/{user_id}.pt"
+ 
+    with open(raw_path, "w", encoding="utf-8") as f:
         json.dump(data, f)
 
     print("Building graph...")
 
-    builder = GraphBuilder(RAW_PATH)
+    builder = GraphBuilder(raw_path)
     graph = builder.build()
 
     print("Saving graph...")
 
-    torch.save(graph, GRAPH_PATH)
+    torch.save(graph, graph_path)
 
-    print("Graph saved at:", GRAPH_PATH)
+    print("Graph saved at:", graph_path)
 
-    return GRAPH_PATH
+    return graph_path

@@ -1,9 +1,8 @@
-from fastapi.responses import FileResponse
-from services.graph_service import build_graph_file
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI
 from pydantic import BaseModel
-import json
+from services.graph_service import build_graph_file
 from services.recommend_service import recommend_videos
+import uuid
 import os
 import uvicorn
 
@@ -17,24 +16,27 @@ class GraphRequest(BaseModel):
 @app.post("/build_graph")
 def build_graph(req: GraphRequest):
 
-    path = build_graph_file(req.data)
+    user_id = str(uuid.uuid4())
 
-    return FileResponse(
-        path,
-        media_type="application/octet-stream",
-        filename="video_graph.pt"
-    )
+    build_graph_file(req.data, user_id)
+
+    return {
+        "user_id": user_id
+    }
 
 
 class RecommendRequest(BaseModel):
-    graph_id: str
+    user_id: str
     history: list
 
 
 @app.post("/recommend")
 def recommend(req: RecommendRequest):
 
-    graph_path = f"graph/{req.graph_id}.pt"
+    graph_path = f"graph/{req.user_id}.pt"
+
+    if not os.path.exists(graph_path):
+        return {"error": "graph not found"}
 
     results = recommend_videos(graph_path, req.history)
 
