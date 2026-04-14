@@ -27,6 +27,4 @@ def build_graph_file(data, user_id):
 
     torch.save(graph, graph_path)
 
-    print("Graph saved at:", graph_path)
-
-    return graph_path
+    print("Graph saved:", graph_path)

@@ -110,7 +110,7 @@ class GNNRecommender:
         for u, v in G.edges():
             edges.append([mapping[u], mapping[v]])
             edges.append([mapping[v], mapping[u]])
-
+            
         if len(edges) == 0:
             return None, None, None
 
@@ -133,7 +133,8 @@ class GNNRecommender:
         history = load_history().get(username, [])
         if not history:
             return []
-        # history = history[-10:0]
+        if len(history) > 10:
+            history = history[-10:0]
         videos = load_videos()
         video_map = {v["video_id"]: v["title"] for v in videos}
 

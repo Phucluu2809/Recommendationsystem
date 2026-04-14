@@ -54,7 +54,7 @@ class EdgeBuilder:
 
     def build_similarity_edges(self, embeddings, threshold=0.8):
 
-        print("Building similarity edges...")
+        print("Building similarity edges...") 
         sim = cosine_similarity(embeddings)
 
         src, dst = [], []

@@ -12,17 +12,19 @@ app = FastAPI()
 class GraphRequest(BaseModel):
     data: dict
 
+# {ytb : video}=> server => graph => tên của m
+# {người dùng: lịch sử} => mi -> lịch sử + id của m ->rcm 
 
 @app.post("/build_graph")
 def build_graph(req: GraphRequest):
 
+    print("API /build_graph called")
+
     user_id = str(uuid.uuid4())
 
     build_graph_file(req.data, user_id)
-
-    return {
-        "user_id": user_id
-    }
+ 
+    return {"user_id": user_id}
 
 
 class RecommendRequest(BaseModel):
@@ -42,6 +44,7 @@ def recommend(req: RecommendRequest):
 
     return {"recommendations": results}
 
+ 
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))

@@ -56,7 +56,7 @@ class Neo4jGraphService:
                         v.published_at=$published_at,
                         v.tags=$tags
                     """,
-                    id=video["id"],
+                    id=video["video_id"],
                     title=video.get("title"),
                     channel_id=video.get("channel_id"),
                     channel_title=video.get("channel_title"),
